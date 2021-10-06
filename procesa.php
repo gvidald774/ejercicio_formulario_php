@@ -4,28 +4,41 @@
  */
     function valida()
     {
-        $valido = false;
-        if(isset($_POST["botonSuma"]) || isset($_POST["botonResta"]) || isset($_POST["botonMulti"]) || isset($_POST["botonDiv"])) // Si el botón existe, es que se ha llamado a la página desde el formulario.
+        $errores = [];
+        
+        if (!(isset($_POST["botonSuma"]) || isset($_POST["botonResta"]) || isset($_POST["botonMulti"]) || isset($_POST["botonDiv"])))
         {
-            // Se comprueba que los números existen y son números.
-            if(isset($_POST["numero1"]) && isset($_POST["numero2"]))
+            $errores["boton"] = "Botón no válido.";
+        }
+        if ($_POST["numero1"] == '')
+        {
+            $errores["numero1"] = "Necesario introducir número.";
+        }
+        else
+        {
+            if (!numerico($_POST["numero1"]))
             {
-                $numero1 = $_POST["numero1"];
-                $numero2 = $_POST["numero2"];
-                if(is_numeric($numero1) && is_numeric($numero2))
-                {
-                    $valido = true; // Si se cumplen todas las condiciones, devuelve true.
-                }
+                $errores["numero1"] = "No es un número válido.";
             }
         }
-        return $valido;
+        if ($_POST["numero2"] == '')
+        {
+            $errores["numero2"] = "Necesario introducir número.";
+        }
+        else
+        {
+            if (!numerico($_POST["numero2"]))
+            {
+                $errores["numero2"] = "No es un número válido.";
+            }
+        }
+        return $errores;
     }
 
-    $correcto = 1;
-    $incorrecto = 0;
+    $errores = valida();
 
-    $error = valida()?$correcto:$incorrecto;
-    if($error==1) // Si el formulario está validado, puede realizarse la suma.
+    $correcto = (count($errores) == 0)?1:0;
+    if($correcto==1) // Si el formulario está validado, puede realizarse la suma.
     {
         $numero1 = $_POST["numero1"];
         $numero2 = $_POST["numero2"];
@@ -46,27 +59,8 @@
         {
             $resultado=divide($numero1,$numero2);
         }
-        else
-        {
-            $error = 2;
-        }
     }
+    
 
-    header("Location: ./formulario.php?resultado=$resultado&error=$error");
+    header("Location: ./formulario.php?resultado=$resultado&error=$correcto");
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado</title>
-    <?php
-        echo "El resultado de la suma es: ";
-        pintor($suma);
-    ?>
-</head>
-<body>
-</body>
-</html>

@@ -1,5 +1,38 @@
 <?php
 
+function valida()
+    {
+        $errores = [];
+        
+        if (!(isset($_POST["botonSuma"]) || isset($_POST["botonResta"]) || isset($_POST["botonMulti"]) || isset($_POST["botonDiv"])))
+        {
+            $errores["boton"] = "Botón no válido.";
+        }
+        if ($_POST["numero1"] == '')
+        {
+            $errores["numero1"] = "Necesario introducir número.";
+        }
+        else
+        {
+            if (!numerico($_POST["numero1"]))
+            {
+                $errores["numero1"] = "No es un número válido.";
+            }
+        }
+        if ($_POST["numero2"] == '')
+        {
+            $errores["numero2"] = "Necesario introducir número.";
+        }
+        else
+        {
+            if (!numerico($_POST["numero2"]))
+            {
+                $errores["numero2"] = "No es un número válido.";
+            }
+        }
+        return $errores;
+    }
+
 function suma($n1,$n2)
 {
     return $n1+$n2;
@@ -29,7 +62,20 @@ function pintor($cosa)
     }
     else
     {
-        echo $cosa;
+        if(is_array($cosa))
+        {
+            echo "<ul>";
+            $errorString = "";
+            foreach($cosa as $clave => $error)
+            {
+                $errorString = $errorString."<li>Error en ".$clave.": ".$error."</li>";
+            }
+            echo $errorString."</ul>";
+        }
+        else
+        {
+            echo $cosa;
+        }
     }
     
 }

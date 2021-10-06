@@ -18,20 +18,16 @@
     </form>
     <?php
         include_once "libintern.php";
+        
         if(isset($_GET["error"]))
         {
-            if($_GET["error"]==0)
+            if($_GET["error"] == 0)
             {
-                pintor("Los valores pasados no son numéricos.");
             }
-            else if($_GET["error"]==2)
-            {
-                pintor("Ha ocurrido un error desconocido. Bueno, desconocido para usted, yo sé lo que ha pasado.");
-            }
-            else
-            {
-                pintor($_GET["resultado"]);
-            }
+        }
+        if(isset($_GET["resultado"]))
+        {
+            pintor($_GET["resultado"]);
         }
     ?>
 </body>
